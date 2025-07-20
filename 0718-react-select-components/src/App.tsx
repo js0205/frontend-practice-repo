@@ -1,34 +1,37 @@
 import React from 'react';
-import { Layout, Typography, Space } from 'antd';
 import CascaderSelector from './components/CascaderSelector';
+import { useResponsiveCSSVariables } from '../hooks';
 
-const { Header, Content } = Layout;
-const { Title } = Typography;
+function App() {
+  // 使用自定义Hook
+  const { currentScale, currentBreakpoint, screenWidth, isReady } = useResponsiveCSSVariables({
+    onScaleChange: (scale, width) => {
+      console.log(`App - 响应式变化: 缩放${scale}, 宽度${width}px`);
+    },
+  });
 
-const App: React.FC = () => {
   return (
-    <Layout style={{ minHeight: '100vh', background: '#f0f2f5' }}>
-      <Header style={{ 
-        padding: '0 24px', 
-        background: '#fff',
-        display: 'flex',
-        alignItems: 'center',
-        boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+    <div style={{
+      minHeight: '100vh',
+      display: 'flex',
+      flexDirection: 'column',
+    }}>
+      <header style={{
+          background: 'rgba(255, 255, 255, 0.9)',
+          padding: '20px',
+          textAlign: 'center',
+          boxShadow: '0 2px 10px rgba(0, 0, 0, 0.1)',
       }}>
-        <Title level={4} style={{ margin: 0, color: '#1890ff' }}>
-          React 19 + TypeScript + Webpack + Ant Design
-        </Title>
-      </Header>
-      
-      <Content style={{ 
-        margin: '24px 16px', 
-        padding: 24, 
-        background: 'transparent'
+        <h1>React 19 + TypeScript + Webpack + Ant Design</h1>
+      </header>
+      <main style={{
+          flex: '1',
+          padding: '40px 20px'
       }}>
-        <CascaderSelector />
-      </Content>
-    </Layout>
+          <CascaderSelector />
+      </main>
+    </div>
   );
-};
+}
 
 export default App; 

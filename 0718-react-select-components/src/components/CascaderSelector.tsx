@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Cascader, Card, Typography, Space, Button, Spin, message } from "antd";
 import { ReloadOutlined, DatabaseOutlined } from "@ant-design/icons";
+import { useResponsiveCSSVariables } from "../hooks/useResponsiveCSSVariables";
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 interface CascaderOption {
   value: string;
@@ -80,6 +81,13 @@ const defaultOptions: CascaderOption[] = [
 ];
 
 const CascaderSelector: React.FC = () => {
+  // 使用自定义Hook
+  const { currentScale, currentBreakpoint, screenWidth, isReady } = useResponsiveCSSVariables({
+    onScaleChange: (scale, width) => {
+      console.log(`CascaderSelector - 响应式变化: 缩放${scale}, 宽度${width}px`);
+    },
+  });
+
   // 定义获取保存数据的函数
   const getSavedOptions = ():CascaderOption[] => {
     try {
@@ -102,6 +110,7 @@ const CascaderSelector: React.FC = () => {
   const [options, setOptions] = useState<CascaderOption[]>(getSavedOptions);
   const [loading, setLoading] = useState(false);
   const [selectedValue, setSelectedValue] = useState<string[]>(getSavedValue);
+
   //异步拉取数据
   const getOptions = () => {
     if (loading) return;
@@ -167,11 +176,20 @@ const CascaderSelector: React.FC = () => {
   return (
     <Card
       title="级联选择器演示"
-      style={{ maxWidth: 600, margin: "20px auto" }}
-      headStyle={{ background: "#f0f2f5", borderBottom: "2px solid #1890ff" }}
+      style={{
+        maxWidth: '37.5rem',
+        margin: 'var(--spacing-lg) auto',
+        fontSize: 'var(--font-size-md)'
+      }}
+      headStyle={{
+        background: "#f0f2f5", 
+        borderBottom: "0.125rem solid #1890ff",
+        fontSize: 'var(--font-size-lg)', 
+        padding: 'var(--spacing-md)'
+      }}
     >
       <Space direction="vertical" style={{ width: "100%" }} size="large">
-        <div style={{ textAlign: "center", marginBottom: 16 }}>
+        <div style={{ textAlign: "center", marginBottom: 'var(--spacing-md)' }}>
           <Space size="middle">
             <Button
               type="primary"
@@ -180,9 +198,11 @@ const CascaderSelector: React.FC = () => {
               icon={<DatabaseOutlined />}
               size="large"
               style={{
-                minWidth: 120,
-                borderRadius: 6,
-                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                minWidth: '7.5rem',
+                borderRadius: 'var(--border-radius-md)', 
+                boxShadow: "0 var(--spacing-xs) var(--spacing-sm) rgba(0,0,0,0.1)",
+                fontSize: 'var(--font-size-md)', 
+                height: '2.5rem',
               }}
             >
               {loading ? "处理中..." : "异步拉取数据"}
@@ -193,10 +213,12 @@ const CascaderSelector: React.FC = () => {
               icon={<ReloadOutlined />}
               size="large"
               style={{
-                minWidth: 80,
-                borderRadius: 6,
-                border: "1px solid #d9d9d9",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                minWidth: '5rem',
+                borderRadius: 'var(--border-radius-md)', 
+                border: "0.0625rem solid #d9d9d9",
+                boxShadow: "0 var(--spacing-xs) var(--spacing-sm) rgba(0,0,0,0.1)",
+                fontSize: 'var(--font-size-md)', 
+                height: '2.5rem',
               }}
             >
               {loading ? "处理中..." : "同步拉取数据"}
@@ -206,18 +228,18 @@ const CascaderSelector: React.FC = () => {
 
         <div
           style={{
-            padding: "16px",
+            padding: 'var(--spacing-md)', 
             background: "#fafafa",
-            borderRadius: 8,
-            border: "1px solid #f0f0f0",
+            borderRadius: 'var(--border-radius-lg)', 
+            border: "0.0625rem solid #f0f0f0",
           }}
         >
           <Text
             strong
             style={{
-              fontSize: 16,
+              fontSize: 'var(--font-size-md)', 
               color: "#262626",
-              marginBottom: 8,
+              marginBottom: 'var(--spacing-sm)', 
               display: "block",
             }}
           >
@@ -228,8 +250,8 @@ const CascaderSelector: React.FC = () => {
             placeholder="请选择地区"
             style={{
               width: "100%",
-              marginTop: 8,
-              borderRadius: 6,
+              marginTop: 'var(--spacing-sm)', 
+              borderRadius: 'var(--border-radius-md)', 
             }}
             disabled={loading}
             value={selectedValue}
@@ -238,9 +260,13 @@ const CascaderSelector: React.FC = () => {
         </div>
 
         {loading && (
-          <div style={{ textAlign: "center", padding: "16px" }}>
+          <div style={{ textAlign: "center", padding: 'var(--spacing-md)' }}>
             <Spin size="large" />
-            <div style={{ marginTop: 8, color: "#666" }}>
+            <div style={{ 
+              marginTop: 'var(--spacing-sm)', 
+              color: "#666",
+              fontSize: 'var(--font-size-md)'
+            }}>
               正在处理数据，请稍候...
             </div>
           </div>
